@@ -18,7 +18,7 @@ export default defineConfig({
     trace: 'on-first-retry',
     browserName: 'chromium',
     screenshot: 'only-on-failure',
-    headless: false
+    headless: true
   }
 
 });
