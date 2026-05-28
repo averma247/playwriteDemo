@@ -45,9 +45,9 @@ test.only('Test Incorrect Credentials', async ({ page }) => {
     await signInBtn.click();
     // await page.waitForTimeout(5000)
 
-    // console.log(await cardTitles.first().textContent());
-    // console.log(await cardTitles.nth(1).textContent());
-    // console.log(await cardTitles.last().textContent());
+    console.log(await cardTitles.first().textContent());
+    console.log(await cardTitles.nth(1).textContent());
+    console.log(await cardTitles.last().textContent());
     const allTitles = await cardTitles.allTextContents();
     console.log(allTitles);
 
