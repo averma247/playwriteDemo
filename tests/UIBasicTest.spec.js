@@ -24,6 +24,7 @@ test.only('Test Incorrect Credentials', async ({ page }) => {
     const usernameTxtBox = page.locator('#username');
     const passwordTxtBox = page.locator('#password');
     const signInBtn = page.locator('#signInBtn');
+    const cardTitles = page.locator('.card-body a');
 
 
     await page.goto('https://rahulshettyacademy.com/loginpagePractise/');
@@ -44,9 +45,11 @@ test.only('Test Incorrect Credentials', async ({ page }) => {
     await signInBtn.click();
     // await page.waitForTimeout(5000)
 
-    console.log(await page.locator(".card-body a").first().textContent());
-    console.log(await page.locator(".card-body a").nth(1).textContent());
-    console.log(await page.locator(".card-body a").last().textContent());
+    // console.log(await cardTitles.first().textContent());
+    // console.log(await cardTitles.nth(1).textContent());
+    // console.log(await cardTitles.last().textContent());
+    const allTitles = await cardTitles.allTextContents();
+    console.log(allTitles);
 
 
 

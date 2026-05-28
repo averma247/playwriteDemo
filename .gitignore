@@ -9,3 +9,8 @@ node_modules/
 
 # System files
 .DS_Store
+
+
+# Allure reports
+allure-report/
+allure-results/
