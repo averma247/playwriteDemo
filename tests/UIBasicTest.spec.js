@@ -10,6 +10,17 @@ test('testUIBasic', async ({ page }) => {
 
 });
 
+test('Test Google Search', async ({ page }) => {
+    await page.goto('https://www.google.com/');
+    const searchTxtBox = page.locator('#APjFqb');
+    await searchTxtBox.fill('Playwright');
+    await searchTxtBox.press('Enter');
+    console.log(await page.title());
+    await expect(page).toHaveTitle(/Playwright/);
+
+});
+
+
 test('Test Incorrect Credentials', async ({ page }) => {
     const usernameTxtBox = page.locator('#username');
     const passwordTxtBox = page.locator('#password');
