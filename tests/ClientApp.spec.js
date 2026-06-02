@@ -10,8 +10,10 @@ test('testUIBasic', async ({ page }) => {
 
 });
 
-test('Client App Test', async ({ page }) => {
+test.only('Client App Test', async ({ page }) => {
 
+    const email = "anshika@gmail.com";
+    const password = "Iamking@000";
     const usernameTxtBox = page.locator('#userEmail');
     const passwordTxtBox = page.locator('#userPassword');
     const signInBtn = page.locator('#login');
@@ -23,8 +25,8 @@ test('Client App Test', async ({ page }) => {
     await page.goto('https://rahulshettyacademy.com/client');
     console.log(await page.title());
 
-    await usernameTxtBox.fill('anshika@gmail.com');
-    await passwordTxtBox.fill('Iamking@000');
+    await usernameTxtBox.fill(email);
+    await passwordTxtBox.fill(password);
 
     console.log(await usernameTxtBox.inputValue());
     console.log(await passwordTxtBox.inputValue());
@@ -48,7 +50,32 @@ test('Client App Test', async ({ page }) => {
 
     await page.locator("[routerlink*='cart']").click();
     //await page.locator('h3:has-text("ZARA COAT 3")').isVisible();
-    expect(page.locator('h3:has-text("' + desiredProduct + '")')).toBeVisible();
+    await expect(page.locator('h3:has-text("' + desiredProduct + '")')).toBeVisible();
+    await page.locator('text=Checkout').click();
+    await page.locator("[placeholder='Select Country']").pressSequentially('ind', { delay: 100 });
+    await page.locator('span').filter({ hasText: 'India' }).last().click();
+    await expect(page.locator('label[type="text"]')).toHaveText(email);
+    await page.locator('a:has-text("PLACE ORDER")').click();
+    await page.locator('.hero-primary').waitFor();
+    await expect(await page.locator('.hero-primary')).toHaveText(' Thankyou for the order. ');
+    const orderId = await page.locator('.em-spacer-1 .ng-star-inserted').textContent();
+    console.log(orderId);
+
+    await page.locator('button[routerlink*="myorders"]').click();
+    await page.locator('tbody').waitFor();
+    const orderRows = await page.locator('tbody tr');
+    const orderCount = await orderRows.count();
+    for (let i = 0; i < orderCount; i++) {
+        const rowOrderId = await orderRows.nth(i).locator('th').textContent();
+        if (orderId.includes(rowOrderId)) {
+            await orderRows.nth(i).locator('button').first().click();
+            break;
+        }
+    }
+
+    const orderIdDetails = await page.locator(".col-text").textContent();
+    expect(orderId.includes(orderIdDetails)).toBeTruthy();
+
 
     await page.pause();
 
