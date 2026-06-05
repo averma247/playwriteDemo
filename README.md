@@ -125,23 +125,23 @@ Configurable options:
 
 Add in `package.json`:
 
-{
-  "scripts": {
-    "test": "playwright test",
-    "test:headed": "playwright test --headed",
-    "test:debug": "playwright test --debug",
-    "test:ui": "playwright test --ui",
-    "report": "playwright show-report"
-  }
-}
-
-Run using:
-    npm run test
-    npm run test:headed
-    npm run test:debug
-    npm run test:ui
-    npm run report
-
+    {
+      "scripts": {
+        "test": "playwright test",
+        "test:headed": "playwright test --headed",
+        "test:debug": "playwright test --debug",
+        "test:ui": "playwright test --ui",
+        "report": "playwright show-report"
+      }
+    }
+    
+    Run using:
+        npm run test
+        npm run test:headed
+        npm run test:debug
+        npm run test:ui
+        npm run report
+    
 ---
 
 ## 🔁 CI/CD Integration (GitHub Actions)
@@ -151,27 +151,96 @@ Create file:
 
 Add:
 
-name: Playwright Tests
+    name: Playwright Tests
 
-on:
-  push:
-    branches: [ main ]
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-
-      - run: npm install
-      - run: npx playwright install
-      - run: npx playwright test
-
+    on:
+      push:
+        branches: [ master ]
+      pull_request:
+        branches: [ master ]
+    
+    jobs:
+      test:
+        runs-on: ubuntu-latest
+        timeout-minutes: 30
+    
+        permissions:
+          contents: read
+          pages: write
+          id-token: write
+    
+        steps:
+          - uses: actions/checkout@v4
+    
+          - uses: actions/setup-node@v4
+            with:
+              node-version: 20
+    
+          - name: Install dependencies
+            run: npm ci
+    
+          - name: Install Playwright Browsers
+            run: npx playwright install --with-deps
+    
+          - name: Run tests
+            run: npx playwright test --retries=2
+    
+          # Upload report for debugging
+          - name: Upload Playwright Report (Artifact)
+            uses: actions/upload-artifact@v4
+            if: always()
+            with:
+              name: playwright-report
+              path: playwright-report/
+    
+          # ✅ Prepare GitHub Pages
+          - name: Setup Pages
+            uses: actions/configure-pages@v5
+    
+          # ✅ Upload report to Pages
+          - name: Upload Pages Artifact
+            uses: actions/upload-pages-artifact@v3
+            if: always()
+            with:
+              path: playwright-report
+    
+          # ✅ Deploy to GitHub Pages
+          - name: Deploy to GitHub Pages
+            uses: actions/deploy-pages@v4
+            if: always()
+    
+          # ✅ Send Email Report
+          - name: Send Email Report
+            uses: dawidd6/action-send-mail@v3
+            if: always()
+            with:
+              server_address: smtp.gmail.com
+              server_port: 587
+    
+              username: ${{ secrets.EMAIL_USERNAME }}
+              password: ${{ secrets.EMAIL_PASSWORD }}
+    
+              subject: "✅ Playwright Test Report"
+              body: |
+                Hello,
+    
+                Playwright test execution has completed.
+    
+                ✅ Repository: ${{ github.repository }}
+                ✅ Branch: ${{ github.ref_name }}
+                ✅ Status: ${{ job.status }}
+    
+                📊 View Full Report:
+                https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
+    
+                Regards,
+                GitHub Actions
+    
+              to: ${{ vars.RECIPIENT_EMAIL }}
+              from: Ajay Automation <${{ secrets.EMAIL_USERNAME }}>
+    
+              attachments: playwright-report/index.html
+        
 ---
 
 ## ✅ Best Practices
