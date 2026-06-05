@@ -55,3 +55,35 @@ jobs:
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
         if: always()
+
+      # ✅ Send Email Report
+      - name: Send Email Report
+        uses: dawidd6/action-send-mail@v3
+        if: always()
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+
+          subject: "✅ Playwright Test Report"
+          body: |
+            Hello,
+
+            Playwright test execution has completed.
+
+            ✅ Repository: ${{ github.repository }}
+            ✅ Branch: ${{ github.ref_name }}
+            ✅ Status: ${{ job.status }}
+
+            📊 View Full Report:
+            https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
+
+            Regards,
+            GitHub Actions
+
+          to: ${{ vars.RECIPIENT_EMAIL }}
+          from: Ajay Automation <${{ secrets.EMAIL_USERNAME }}>
+
+          attachments: playwright-report/index.html
