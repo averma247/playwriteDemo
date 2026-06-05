@@ -40,9 +40,6 @@ jobs:
           name: playwright-report
           path: playwright-report/
 
-      # Setup GitHub Pages
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
 
       # Upload report to Pages
       - name: Upload Pages Artifact
@@ -51,10 +48,6 @@ jobs:
         with:
           path: playwright-report
 
-      # Deploy to GitHub Pages
-      - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v4
-        if: always()
 
       # ✅ Send Email Notification
       - name: Send Email Notification
