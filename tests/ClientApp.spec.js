@@ -10,7 +10,7 @@ test('testUIBasic', async ({ page }) => {
 
 });
 
-test.only('Client App Test', async ({ page }) => {
+test('Client App Test', async ({ page }) => {
 
     const email = "anshika@gmail.com";
     const password = "Iamking@000";
