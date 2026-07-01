@@ -77,10 +77,6 @@ test('Client App Test', async ({ page }) => {
     expect(orderId.includes(orderIdDetails)).toBeTruthy();
 
 
-    await page.pause();
-
-
-
 
 
 });
