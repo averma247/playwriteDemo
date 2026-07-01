@@ -12,12 +12,25 @@ export default defineConfig({
     timeout: 5000
   },
 
-  reporter: 'html',
+
+  /* Retries only in CI */
+  retries: process.env.CI ? 2 : 0,
+
+
+
+  /* Reports */
+  reporter: [
+    ['html'],
+    ['list'],
+    ['junit', { outputFile: 'test-results/results.xml' }],
+  ],
+
   use: {
 
     trace: 'on-first-retry',
     browserName: 'chromium',
     screenshot: 'only-on-failure',
+    video: 'retain-on-failure',
     headless: true
   }
 
