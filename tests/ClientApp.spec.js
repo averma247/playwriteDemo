@@ -12,7 +12,7 @@ test('testUIBasic', async ({ page }) => {
 
 test('Client App Test', async ({ page }) => {
 
-    const email = "anshika@gmail.com";
+    const email = "kash.ajayverma@gmail.com";
     const password = "Iamking@000";
     const usernameTxtBox = page.locator('#userEmail');
     const passwordTxtBox = page.locator('#userPassword');
