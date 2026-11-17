@@ -12,7 +12,7 @@ test('testUIBasic', async ({ page }) => {
 
 test('Test Google Search', async ({ page }) => {
     await page.goto('https://www.google.com/');
-    const searchTxtBox = page.locator('#APjFqb');
+    const searchTxtBox = page.locator('#ti6dpd');
     await searchTxtBox.fill('Playwright');
     await searchTxtBox.press('Enter');
     console.log(await page.title());
