@@ -23,6 +23,9 @@ export default defineConfig({
     ['html'],
     ['list'],
     ['junit', { outputFile: 'test-results/results.xml' }],
+    ['allure-playwright', {
+      resultsDir: 'allure-results'
+    }]
   ],
 
   use: {
